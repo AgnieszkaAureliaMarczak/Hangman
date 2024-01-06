@@ -143,10 +143,10 @@ public class Hangman {
 
     static void prepareTempPassword() {
         tempPassword = new char[drawnPassword.length];
-        fillInTempPasswordWithUnderscores();
+        encodePassword();
     }
 
-    static void fillInTempPasswordWithUnderscores() {
+    static void encodePassword() {
         for (int i = 0; i < drawnPassword.length; i++) {
             tempPassword[i] = switch (drawnPassword[i]) {
                 case ' ' -> ' ';
@@ -156,7 +156,7 @@ public class Hangman {
         }
     }
 
-    static String encodePassword() {
+    static String encodePassword1() {
         String zakodowaneHaslo = "";
         for (char symbol : drawnPassword) {
             if (symbol == ' ' || symbol == '-' || podaneLitery.contains(symbol + "")) {
@@ -169,36 +169,36 @@ public class Hangman {
     }
 
     static void play() {
-        wyswietlHasloDoZgadywania();
-        boolean uzytkownikZgadlHaslo = false;
+        displayEncodedPassword();
+        boolean isPasswordGuessed = false;
         do {
-            char litera = podajLitere();
-            podaneLitery += litera;
-            if (sprawdzCzyPoprawnaLitera(litera)) {
-                uzytkownikZgadlHaslo = zareagujNaTrafienieUzytkownika(litera);
+            char letter = readPlayersLetter();
+            podaneLitery += letter;
+            if (checkIfPasswordsContainsLetter(letter)) {
+                isPasswordGuessed = zareagujNaTrafienieUzytkownika(letter);
             } else {
                 zareagujNaNietrafienieUzytkownika();
             }
-        } while ((numberOfUnsuccessfulAttempts < 9) && (!czyHasloOdgadniete()) && (!uzytkownikZgadlHaslo));
+        } while ((numberOfUnsuccessfulAttempts < 9) && (!czyHasloOdgadniete()) && (!isPasswordGuessed));
     }
 
-    static void wyswietlHasloDoZgadywania() {
-        for (char litera : tempPassword) {
-            System.out.print(Character.toUpperCase(litera));
+    static void displayEncodedPassword() {
+        for (char letter : tempPassword) {
+            System.out.print(Character.toUpperCase(letter));
         }
         System.out.println();
         System.out.println();
     }
 
-    static char podajLitere() {
+    static char readPlayersLetter() {
         System.out.println("Podaj literę:");
-        String podanaLitera = scanner.nextLine();
-        return podanaLitera.charAt(0);
+        String givenLetter = scanner.nextLine();
+        return givenLetter.charAt(0);
     }
 
-    static boolean sprawdzCzyPoprawnaLitera(char podanaLitera) {
+    static boolean checkIfPasswordsContainsLetter(char givenLetter) {
         for (int i = 0; i < drawnPassword.length; i++) {
-            if (drawnPassword[i] == podanaLitera) {
+            if (drawnPassword[i] == givenLetter) {
                 return true;
             }
         }
@@ -208,7 +208,7 @@ public class Hangman {
     static boolean zareagujNaTrafienieUzytkownika(char litera) {
         wpiszPodanaLitere(litera);
         System.out.println();
-        wyswietlHasloDoZgadywania();
+        displayEncodedPassword();
         //System.out.println(zakodujHaslo());
         return zgadnijHaslo();
     }
@@ -234,8 +234,8 @@ public class Hangman {
 
     static void zareagujNaNietrafienieUzytkownika() {
         numberOfUnsuccessfulAttempts++;
-        narysujWisielca();
-        wyswietlTabliceWisielca();
+        drawHangman();
+        printHangmanArray();
     }
 
     static boolean czyHasloOdgadniete() {
@@ -255,32 +255,32 @@ public class Hangman {
         System.out.println();
     }
 
-    static void narysujWisielca() {
+    static void drawHangman() {
         switch (numberOfUnsuccessfulAttempts) {
             case 1 -> {
-                for (int wiersz = 2; wiersz < hangmanArray.length - 1; wiersz++) {
-                    hangmanArray[wiersz][30] = '|';
+                for (int row = 2; row < hangmanArray.length - 1; row++) {
+                    hangmanArray[row][30] = '|';
                 }
             }
             case 2 -> {
                 Arrays.fill(hangmanArray[2], 16, 29, '_');
-                for (int wiersz = 3; wiersz < 6; wiersz++) {
-                    hangmanArray[wiersz][16] = '|';
+                for (int row = 3; row < 6; row++) {
+                    hangmanArray[row][16] = '|';
                 }
             }
             case 3 -> {
-                for (int kolumna = 14; kolumna < 19; kolumna++) {
-                    hangmanArray[6][kolumna] = '-';
+                for (int column = 14; column < 19; column++) {
+                    hangmanArray[6][column] = '-';
                 }
                 hangmanArray[7][14] = '|';
                 hangmanArray[7][18] = '|';
-                for (int kolumna = 14; kolumna < 19; kolumna++) {
-                    hangmanArray[8][kolumna] = '-';
+                for (int column = 14; column < 19; column++) {
+                    hangmanArray[8][column] = '-';
                 }
             }
             case 4 -> {
-                for (int wiersz = 9; wiersz < 12; wiersz++) {
-                    hangmanArray[wiersz][16] = '|';
+                for (int row = 9; row < 12; row++) {
+                    hangmanArray[row][16] = '|';
                 }
             }
             case 5 -> {
@@ -301,10 +301,10 @@ public class Hangman {
         }
     }
 
-    static void wyswietlTabliceWisielca() {
-        for (int wiersz = 0; wiersz < hangmanArray.length; wiersz++) {
-            for (int kolumna = 0; kolumna < hangmanArray[wiersz].length; kolumna++) {
-                System.out.print(hangmanArray[wiersz][kolumna]);
+    static void printHangmanArray() {
+        for (int row = 0; row < hangmanArray.length; row++) {
+            for (int column = 0; column < hangmanArray[row].length; column++) {
+                System.out.print(hangmanArray[row][column]);
             }
             System.out.println();
         }
