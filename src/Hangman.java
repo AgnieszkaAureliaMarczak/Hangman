@@ -45,9 +45,9 @@ public class Hangman {
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        readPasswordsFromFile();
-        System.out.println(Arrays.toString(passwordsFromFile));
-        System.exit(0);
+        /*readPasswordsFromFile();
+        System.out.println(Arrays.toString(passwordsFromFile));*/
+
         prepareGame();
         play();
         System.out.println("Koniec gry.");
@@ -175,11 +175,12 @@ public class Hangman {
             char letter = readPlayersLetter();
             podaneLitery += letter;
             if (checkIfPasswordsContainsLetter(letter)) {
-                isPasswordGuessed = zareagujNaTrafienieUzytkownika(letter);
+                isPasswordGuessed = reactWhenLetterGuessed(letter);
             } else {
-                zareagujNaNietrafienieUzytkownika();
+                reactIfLetterNotGuessed();
             }
-        } while ((numberOfUnsuccessfulAttempts < 9) && (!czyHasloOdgadniete()) && (!isPasswordGuessed));
+        } while ((numberOfUnsuccessfulAttempts < 9) && !isPasswordGuessed);
+       // && (!checkIfPasswordGuessed()
     }
 
     static void displayEncodedPassword() {
@@ -205,40 +206,41 @@ public class Hangman {
         return false;
     }
 
-    static boolean zareagujNaTrafienieUzytkownika(char litera) {
-        wpiszPodanaLitere(litera);
+    static boolean reactWhenLetterGuessed(char letter) {
+        showGuessedLetterInPassword(letter);
         System.out.println();
         displayEncodedPassword();
         //System.out.println(zakodujHaslo());
-        return zgadnijHaslo();
+        return guessPassword();
     }
 
-    static void wpiszPodanaLitere(char podanaLitera) {
+    static void showGuessedLetterInPassword(char guessedLetter) {
         for (int i = 0; i < drawnPassword.length; i++) {
-            if (drawnPassword[i] == podanaLitera) {
-                tempPassword[i] = podanaLitera;
+            if (drawnPassword[i] == guessedLetter) {
+                tempPassword[i] = guessedLetter;
             }
         }
     }
 
-    static boolean zgadnijHaslo() {
+    static boolean guessPassword() {
         System.out.println("Zgadnij hasło lub wciśnij \"Enter\"");
-        String probaHasla = scanner.nextLine();
-        if (probaHasla.equals(new String(drawnPassword))) {
+        String passwordAttempt = scanner.nextLine();
+        if (passwordAttempt.equals(new String(drawnPassword))) {
             System.out.println("Koniec gry! Brawo, hasło odgadnięte.");
-            wyswietlHaslo();
+            printPassword();
             return true;
         }
+        System.out.println("Niepoprawne hasło.");
         return false;
     }
 
-    static void zareagujNaNietrafienieUzytkownika() {
+    static void reactIfLetterNotGuessed() {
         numberOfUnsuccessfulAttempts++;
         drawHangman();
         printHangmanArray();
     }
 
-    static boolean czyHasloOdgadniete() {
+    static boolean checkIfPasswordGuessed() {
         for (int i = 0; i < tempPassword.length; i++) {
             if (tempPassword[i] == '_') {
                 return false;
@@ -247,9 +249,9 @@ public class Hangman {
         return true;
     }
 
-    static void wyswietlHaslo() {
-        for (char litera : drawnPassword) {
-            System.out.print(Character.toUpperCase(litera));
+    static void printPassword() {
+        for (char letter : drawnPassword) {
+            System.out.print(Character.toUpperCase(letter));
         }
         System.out.println();
         System.out.println();
