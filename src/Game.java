@@ -1,10 +1,9 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Hangman {
+public class Game {
     static String[] polscyAktorzyIAktorki =
             {"Andrzej Grabowski", "Janusz Gajos", "Anna Przybylska", "Franciszek Pieczka",
                     "Pola Negri", "Borys Szyc", "Joanna Kulig", "Jan Englert",
@@ -40,17 +39,14 @@ public class Hangman {
     static char[] drawnPassword;
     static char[] tempPassword;
     static int numberOfUnsuccessfulAttempts = 0;
-    static char[][] hangmanArray = new char[16][40];
-    static String podaneLitery = "";
+
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         /*readPasswordsFromFile();
         System.out.println(Arrays.toString(passwordsFromFile));*/
-
         prepareGame();
         playGame();
-
     }
 
     static String[] readPasswordsFromFile() {
@@ -71,21 +67,9 @@ public class Hangman {
     }
 
     static void prepareGame() {
-        prepareHangmanArray();
+        HangmanDrawing.prepareHangmanArray();
         printCommunicates();
         preparePassword();
-    }
-
-    static void prepareHangmanArray() {
-        Arrays.fill(hangmanArray[0], '—');
-        for (int row = 1; row < hangmanArray.length - 1; row++) {
-            hangmanArray[row][0] = '|';
-            for (int column = 1; column < hangmanArray[row].length - 1; column++) {
-                hangmanArray[row][column] = ' ';
-            }
-            hangmanArray[row][hangmanArray[row].length - 1] = '|';
-        }
-        Arrays.fill(hangmanArray[hangmanArray.length - 1], '—');
     }
 
     static void printCommunicates() {
@@ -123,7 +107,7 @@ public class Hangman {
 
     static String[] selectCategory() {
         int category = scanner.nextInt();
-        if (category < 0 || category >= categories.length) {
+        if (category < 0 || category > categories.length) {
             System.out.println("Podana kategoria wykracza poza zakres 1 - " + categories.length + "\n" +
                     "Podaj kategorię:");
             return selectCategory();
@@ -143,10 +127,10 @@ public class Hangman {
 
     static void prepareTempPassword() {
         tempPassword = new char[drawnPassword.length];
-        encodePassword();
+        encodeTempPassword();
     }
 
-    static void encodePassword() {
+    static void encodeTempPassword() {
         for (int i = 0; i < drawnPassword.length; i++) {
             tempPassword[i] = switch (drawnPassword[i]) {
                 case ' ' -> ' ';
@@ -156,31 +140,14 @@ public class Hangman {
         }
     }
 
-    static String encodePassword1() {
-        String zakodowaneHaslo = "";
-        for (char symbol : drawnPassword) {
-            if (symbol == ' ' || symbol == '-' || podaneLitery.contains(symbol + "")) {
-                zakodowaneHaslo += symbol;
-            } else {
-                zakodowaneHaslo += "_";
-            }
-        }
-        return zakodowaneHaslo;
-    }
-
     static void playGame() {
         displayEncodedPassword();
-        boolean isPasswordGuessed = false;
+        boolean isPasswordGuessed;
         do {
             char letter = readPlayersLetter();
-            podaneLitery += letter;
-            if (checkIfPasswordsContainsLetter(letter)) {
-                isPasswordGuessed = reactWhenLetterGuessed(letter);
-            } else {
-                reactIfLetterNotGuessed();
-            }
-        } while ((numberOfUnsuccessfulAttempts < 9) && !isPasswordGuessed);
-       endGameWhenPasswordNotGuessed();
+            isPasswordGuessed = respondToGivenLetter(letter);
+        } while (numberOfUnsuccessfulAttempts < 9 && !isPasswordGuessed);
+        endGameWhenPasswordNotGuessed();
     }
 
     static void displayEncodedPassword() {
@@ -197,6 +164,15 @@ public class Hangman {
         return givenLetter.charAt(0);
     }
 
+    static boolean respondToGivenLetter(char letter) {
+        if (checkIfPasswordsContainsLetter(letter)) {
+            return reactWhenLetterGuessed(letter);
+        } else {
+            reactIfLetterNotGuessed();
+            return false;
+        }
+    }
+
     static boolean checkIfPasswordsContainsLetter(char givenLetter) {
         for (int i = 0; i < drawnPassword.length; i++) {
             if (drawnPassword[i] == givenLetter) {
@@ -210,7 +186,6 @@ public class Hangman {
         showGuessedLetterInPassword(letter);
         System.out.println();
         displayEncodedPassword();
-        //System.out.println(zakodujHaslo());
         return guessPassword();
     }
 
@@ -226,18 +201,18 @@ public class Hangman {
         System.out.println("Zgadnij hasło lub wciśnij \"Enter\"");
         String passwordAttempt = scanner.nextLine();
         if (passwordAttempt.equals(new String(drawnPassword))) {
-            System.out.println("Koniec gry! Brawo, hasło odgadnięte.");
+            System.out.println("Brawo, hasło odgadnięte!");
             printPassword();
             return true;
         }
-        System.out.println("Niepoprawne hasło.");
+        System.out.println("Graj dalej.");
         return false;
     }
 
     static void reactIfLetterNotGuessed() {
         numberOfUnsuccessfulAttempts++;
-        drawHangman();
-        printHangmanArray();
+        HangmanDrawing.drawHangman();
+        HangmanDrawing.printHangmanArray();
     }
 
     static void printPassword() {
@@ -248,62 +223,7 @@ public class Hangman {
         System.out.println();
     }
 
-    static void drawHangman() {
-        switch (numberOfUnsuccessfulAttempts) {
-            case 1 -> {
-                for (int row = 2; row < hangmanArray.length - 1; row++) {
-                    hangmanArray[row][30] = '|';
-                }
-            }
-            case 2 -> {
-                Arrays.fill(hangmanArray[2], 16, 29, '_');
-                for (int row = 3; row < 6; row++) {
-                    hangmanArray[row][16] = '|';
-                }
-            }
-            case 3 -> {
-                for (int column = 14; column < 19; column++) {
-                    hangmanArray[6][column] = '-';
-                }
-                hangmanArray[7][14] = '|';
-                hangmanArray[7][18] = '|';
-                for (int column = 14; column < 19; column++) {
-                    hangmanArray[8][column] = '-';
-                }
-            }
-            case 4 -> {
-                for (int row = 9; row < 12; row++) {
-                    hangmanArray[row][16] = '|';
-                }
-            }
-            case 5 -> {
-                hangmanArray[12][15] = '╱';
-                hangmanArray[12][17] = '╲';
-            }
-            case 6 -> {
-                hangmanArray[13][14] = '╱';
-                hangmanArray[13][18] = '╲';
-            }
-            case 7 -> hangmanArray[10][15] = '╲';
-            case 8 -> hangmanArray[10][17] = '╱';
-            case 9 -> {
-                hangmanArray[10][15] = '╱';
-                hangmanArray[10][17] = '╲';
-            }
-            default -> System.out.println();
-        }
-    }
-
-    static void printHangmanArray() {
-        for (int row = 0; row < hangmanArray.length; row++) {
-            for (int column = 0; column < hangmanArray[row].length; column++) {
-                System.out.print(hangmanArray[row][column]);
-            }
-            System.out.println();
-        }
-    }
-
-    static void endGameWhenPasswordNotGuessed(){
+    static void endGameWhenPasswordNotGuessed() {
         System.out.println("Koniec gry.");
     }
 }
