@@ -49,8 +49,8 @@ public class Hangman {
         System.out.println(Arrays.toString(passwordsFromFile));*/
 
         prepareGame();
-        play();
-        System.out.println("Koniec gry.");
+        playGame();
+
     }
 
     static String[] readPasswordsFromFile() {
@@ -168,7 +168,7 @@ public class Hangman {
         return zakodowaneHaslo;
     }
 
-    static void play() {
+    static void playGame() {
         displayEncodedPassword();
         boolean isPasswordGuessed = false;
         do {
@@ -180,7 +180,7 @@ public class Hangman {
                 reactIfLetterNotGuessed();
             }
         } while ((numberOfUnsuccessfulAttempts < 9) && !isPasswordGuessed);
-       // && (!checkIfPasswordGuessed()
+       endGameWhenPasswordNotGuessed();
     }
 
     static void displayEncodedPassword() {
@@ -238,15 +238,6 @@ public class Hangman {
         numberOfUnsuccessfulAttempts++;
         drawHangman();
         printHangmanArray();
-    }
-
-    static boolean checkIfPasswordGuessed() {
-        for (int i = 0; i < tempPassword.length; i++) {
-            if (tempPassword[i] == '_') {
-                return false;
-            }
-        }
-        return true;
     }
 
     static void printPassword() {
@@ -310,5 +301,9 @@ public class Hangman {
             }
             System.out.println();
         }
+    }
+
+    static void endGameWhenPasswordNotGuessed(){
+        System.out.println("Koniec gry.");
     }
 }
