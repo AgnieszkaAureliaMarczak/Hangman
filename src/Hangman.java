@@ -35,9 +35,9 @@ public class Hangman {
                     "Wiąz szypułkowy", "Wierzba biała", "Dziewanna fioletowa", "Fiołek ogrodowy",
                     "Goździk majowy", "Malwa różowa", "Niezapominajka", "Szałwia błyszcząca",
                     "Begonia królewska", "Filodendron", "Różanecznik indyjski", "Lubczyk ogrodowy"};
-    static String[][] kategorie = {polscyAktorzyIAktorki,geografiaSwiata,jedzenie,zwierzeta,rosliny};
+    static String[][] categories = {polscyAktorzyIAktorki,geografiaSwiata,jedzenie,zwierzeta,rosliny};
     static String [] passwordsFromFile = new String[20];
-    static char[] randomlySelectedPassword;
+    static char[] drawnPassword;
     static char[] tempPassword;
     static int numberOfUnsuccessfulAttempts = 0;
     static char[][] hangmanArray = new char[16][40];
@@ -113,55 +113,44 @@ public class Hangman {
     }
 
     static void preparePassword() {
-        String[] wybranaKategoria = wybierzKategorie();
+        String[] selectedCategory = selectCategory();
         scanner.nextLine();
-        String haslo = losujHaslo(wybranaKategoria);
-        System.out.println(haslo);
-        randomlySelectedPassword = haslo.toLowerCase().toCharArray();
-        tempPassword = new char[randomlySelectedPassword.length];
-        wypelnijRoboczeHasloPodkreslnikami();
+        String password = drawPassword(selectedCategory);
+        System.out.println(password);
+        drawnPassword = password.toLowerCase().toCharArray();
+        tempPassword = new char[drawnPassword.length];
+        fillInTempPasswordWithUnderscores();
     }
 
-    static String[] wybierzKategorie() {
-        int kategoria = scanner.nextInt();
-        if (kategoria < 0 || kategoria >= kategorie.length) {
-            System.out.println("Podaj max " + kategorie.length);
-            return wybierzKategorie();
+    static String[] selectCategory() {
+        int category = scanner.nextInt();
+        if (category < 0 || category >= categories.length) {
+            System.out.println("Podana kategoria wykracza poza zakres 1 - " + categories.length + "\n" +
+                    "Podaj kategorię:");
+            return selectCategory();
         }
-        return kategorie[kategoria - 1];
-       /* return switch (kategoria) {
-            case 1 -> polscyAktorzyIAktorki;
-            case 2 -> geografiaSwiata;
-            case 3 -> jedzenie;
-            case 4 -> zwierzeta;
-            case 5 -> rosliny;
-            default -> new String[0];
-        };*/
+        return categories[category - 1];
     }
 
-    static String losujHaslo(String[] kategoria) {
-        Random losowanie = new Random();
-        int pozycjaHasla = losowanie.nextInt(20);
-        return kategoria[pozycjaHasla];
+    static String drawPassword(String[] category) {
+        Random drawing = new Random();
+        int passwordIndex = drawing.nextInt(20);
+        return category[passwordIndex];
     }
 
-    static void wypelnijRoboczeHasloPodkreslnikami() {
-        for (int i = 0; i < randomlySelectedPassword.length; i++) {
-           /* hasloDoOperacji[i] = wylosowaneHaslo[i];
-            if (wylosowaneHaslo[i] != ' ' && wylosowaneHaslo[i] != '-') {
-                hasloDoOperacji[i] = '_';
-            }*/
-            switch (randomlySelectedPassword[i]) {
-                case ' ' -> tempPassword[i] = ' ';
-                case '-' -> tempPassword[i] = '-';
-                default -> tempPassword[i] = '_';
-            }
+    static void fillInTempPasswordWithUnderscores() {
+        for (int i = 0; i < drawnPassword.length; i++) {
+            tempPassword[i] = switch (drawnPassword[i]) {
+                case ' ' ->  ' ';
+                case '-' -> '-';
+                default -> '_';
+            };
         }
     }
 
     static String zakodujHaslo() {
         String zakodowaneHaslo = "";
-        for (char symbol : randomlySelectedPassword) {
+        for (char symbol : drawnPassword) {
             if (symbol == ' ' || symbol == '-' || podaneLitery.contains(symbol + "")) {
                 zakodowaneHaslo += symbol;
             } else {
@@ -200,8 +189,8 @@ public class Hangman {
     }
 
     static boolean sprawdzCzyPoprawnaLitera(char podanaLitera) {
-        for (int i = 0; i < randomlySelectedPassword.length; i++) {
-            if (randomlySelectedPassword[i] == podanaLitera) {
+        for (int i = 0; i < drawnPassword.length; i++) {
+            if (drawnPassword[i] == podanaLitera) {
                 return true;
             }
         }
@@ -217,8 +206,8 @@ public class Hangman {
     }
 
     static void wpiszPodanaLitere(char podanaLitera) {
-        for (int i = 0; i < randomlySelectedPassword.length; i++) {
-            if (randomlySelectedPassword[i] == podanaLitera) {
+        for (int i = 0; i < drawnPassword.length; i++) {
+            if (drawnPassword[i] == podanaLitera) {
                 tempPassword[i] = podanaLitera;
             }
         }
@@ -227,7 +216,7 @@ public class Hangman {
     static boolean zgadnijHaslo() {
         System.out.println("Zgadnij hasło lub wciśnij \"Enter\"");
         String probaHasla = scanner.nextLine();
-        if (probaHasla.equals(new String(randomlySelectedPassword))) {
+        if (probaHasla.equals(new String(drawnPassword))) {
             System.out.println("Koniec gry! Brawo, hasło odgadnięte.");
             wyswietlHaslo();
             return true;
@@ -251,7 +240,7 @@ public class Hangman {
     }
 
     static void wyswietlHaslo() {
-        for (char litera : randomlySelectedPassword) {
+        for (char litera : drawnPassword) {
             System.out.print(Character.toUpperCase(litera));
         }
         System.out.println();
