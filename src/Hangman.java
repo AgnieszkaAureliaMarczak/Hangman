@@ -35,8 +35,8 @@ public class Hangman {
                     "Wiąz szypułkowy", "Wierzba biała", "Dziewanna fioletowa", "Fiołek ogrodowy",
                     "Goździk majowy", "Malwa różowa", "Niezapominajka", "Szałwia błyszcząca",
                     "Begonia królewska", "Filodendron", "Różanecznik indyjski", "Lubczyk ogrodowy"};
-    static String[][] categories = {polscyAktorzyIAktorki,geografiaSwiata,jedzenie,zwierzeta,rosliny};
-    static String [] passwordsFromFile = new String[20];
+    static String[][] categories = {polscyAktorzyIAktorki, geografiaSwiata, jedzenie, zwierzeta, rosliny};
+    static String[] passwordsFromFile = new String[20];
     static char[] drawnPassword;
     static char[] tempPassword;
     static int numberOfUnsuccessfulAttempts = 0;
@@ -59,7 +59,7 @@ public class Hangman {
             int arrayIndex = 0;
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
-                String password = line.substring(0,line.length()-1);
+                String password = line.substring(0, line.length() - 1);
                 passwordsFromFile[arrayIndex] = password;
                 arrayIndex++;
             }
@@ -88,7 +88,7 @@ public class Hangman {
         Arrays.fill(hangmanArray[hangmanArray.length - 1], '—');
     }
 
-    static void printCommunicates(){
+    static void printCommunicates() {
         printGreeting();
         printCategorySelection();
     }
@@ -97,16 +97,16 @@ public class Hangman {
         System.out.println("Witaj w grze w wisielca!");
     }
 
-    static void printCategorySelection(){
+    static void printCategorySelection() {
         String textBlock = """
                 Wybierz kategorię:
-                
+                                
                 1. Polscy Aktorzy i Aktorki
                 2. Geografia Świata
                 3. Jedzenie
                 4. Zwierzęta
                 5. Rośliny
-                
+                                
                 Wpisz liczbę od 1 do 5.
                 """;
         System.out.println(textBlock);
@@ -117,9 +117,8 @@ public class Hangman {
         scanner.nextLine();
         String password = drawPassword(selectedCategory);
         System.out.println(password);
-        drawnPassword = password.toLowerCase().toCharArray();
-        tempPassword = new char[drawnPassword.length];
-        fillInTempPasswordWithUnderscores();
+        drawnPassword = createCharArrayFromPassword(password);
+        prepareTempPassword();
     }
 
     static String[] selectCategory() {
@@ -138,17 +137,26 @@ public class Hangman {
         return category[passwordIndex];
     }
 
+    static char[] createCharArrayFromPassword(String password) {
+        return password.toLowerCase().toCharArray();
+    }
+
+    static void prepareTempPassword() {
+        tempPassword = new char[drawnPassword.length];
+        fillInTempPasswordWithUnderscores();
+    }
+
     static void fillInTempPasswordWithUnderscores() {
         for (int i = 0; i < drawnPassword.length; i++) {
             tempPassword[i] = switch (drawnPassword[i]) {
-                case ' ' ->  ' ';
+                case ' ' -> ' ';
                 case '-' -> '-';
                 default -> '_';
             };
         }
     }
 
-    static String zakodujHaslo() {
+    static String encodePassword() {
         String zakodowaneHaslo = "";
         for (char symbol : drawnPassword) {
             if (symbol == ' ' || symbol == '-' || podaneLitery.contains(symbol + "")) {
