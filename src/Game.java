@@ -10,28 +10,12 @@ public class Game {
     static char[] drawnPassword;
     static char[] tempPassword;
     static int numberOfUnsuccessfulAttempts = 0;
+    static int maxNumberOfGuesses = 10;
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         prepareGame();
         playGame();
-    }
-
-    static String[] readCategoryPasswordsFromFile(String fileName) {
-        try {
-            Scanner sc = new Scanner(new File(fileName + ".csv"));
-            int arrayIndex = 0;
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine();
-                String password = line.substring(0, line.length() - 1);
-                selectedCategoryFromFile[arrayIndex] = password;
-                arrayIndex++;
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("Nie znaleziono pliku");
-            e.printStackTrace();
-        }
-        return null;
     }
 
     static void prepareGame() {
@@ -46,7 +30,9 @@ public class Game {
     }
 
     static void printGreeting() {
-        System.out.println("Witaj w grze w wisielca!");
+        System.out.println();
+        System.out.println("Witaj w grze w wisielca! Masz 10 prób na odgadnięcie hasła! Powodzenia!");
+        System.out.println();
     }
 
     static void printCategorySelection() {
@@ -84,6 +70,23 @@ public class Game {
         };
     }
 
+    static String[] readCategoryPasswordsFromFile(String fileName) {
+        try {
+            Scanner sc = new Scanner(new File(fileName + ".csv"));
+            int arrayIndex = 0;
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                String password = line.substring(0, line.length() - 1);
+                selectedCategoryFromFile[arrayIndex] = password;
+                arrayIndex++;
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Nie znaleziono pliku");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     static String drawPassword(String[] category) {
         Random drawing = new Random();
         int passwordIndex = drawing.nextInt(20);
@@ -115,7 +118,7 @@ public class Game {
         do {
             char letter = readPlayersLetter();
             isPasswordGuessed = respondToGivenLetter(letter);
-        } while (numberOfUnsuccessfulAttempts < 9 && !isPasswordGuessed);
+        } while (numberOfUnsuccessfulAttempts < maxNumberOfGuesses - 1 && !isPasswordGuessed);
         endGameWhenPasswordNotGuessed();
     }
 
