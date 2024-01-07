@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -34,7 +35,8 @@ public class Game {
                     "Wiąz szypułkowy", "Wierzba biała", "Dziewanna fioletowa", "Fiołek ogrodowy",
                     "Goździk majowy", "Malwa różowa", "Niezapominajka", "Szałwia błyszcząca",
                     "Begonia królewska", "Filodendron", "Różanecznik indyjski", "Lubczyk ogrodowy"};
-    static String[][] categories = {polscyAktorzyIAktorki, geografiaSwiata, jedzenie, zwierzeta, rosliny};
+    static String[] categories = {"Polscy Aktorzy i Aktorki", "Geografia Świata", "Jedzenie",
+            "Zwierzęta", "Rośliny"};
     static String[] passwordsFromFile = new String[20];
     static char[] drawnPassword;
     static char[] tempPassword;
@@ -43,15 +45,16 @@ public class Game {
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        /*readPasswordsFromFile();
-        System.out.println(Arrays.toString(passwordsFromFile));*/
+        readPasswordsFromFile("polscy_aktorzy");
+        System.out.println(Arrays.toString(passwordsFromFile));
+        System.exit(0);
         prepareGame();
         playGame();
     }
 
-    static String[] readPasswordsFromFile() {
+    static String[] readPasswordsFromFile(String fileName) {
         try {
-            Scanner sc = new Scanner(new File("aktorzy.csv"));
+            Scanner sc = new Scanner(new File(fileName + ".csv"));
             int arrayIndex = 0;
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
@@ -82,22 +85,15 @@ public class Game {
     }
 
     static void printCategorySelection() {
-        String textBlock = """
-                Wybierz kategorię:
-                                
-                1. Polscy Aktorzy i Aktorki
-                2. Geografia Świata
-                3. Jedzenie
-                4. Zwierzęta
-                5. Rośliny
-                                
-                Wpisz liczbę od 1 do 5.
-                """;
-        System.out.println(textBlock);
+        System.out.println("Wybierz kategorię:");
+        for (int i = 0; i < categories.length; i++) {
+            System.out.println(i + 1 + ". " + categories[i]);
+        }
+        System.out.println("Wpisz liczbę od 1 do 5.");
     }
 
     static void preparePassword() {
-        String[] selectedCategory = selectCategory();
+        String selectedCategory = selectCategory();
         scanner.nextLine();
         String password = drawPassword(selectedCategory);
         System.out.println(password);
@@ -105,7 +101,7 @@ public class Game {
         prepareTempPassword();
     }
 
-    static String[] selectCategory() {
+    static String selectCategory() {
         int category = scanner.nextInt();
         if (category < 0 || category > categories.length) {
             System.out.println("Podana kategoria wykracza poza zakres 1 - " + categories.length + "\n" +
