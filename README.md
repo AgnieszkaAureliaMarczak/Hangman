@@ -12,20 +12,14 @@ Play against a computer opponent: select a category and try to guess the passwor
 I designed it to practise the principles of structure-oriented programming.*  
 
 ## :star: Features
-:point_right: Write unlimited number of coupons/vouchers   
-:point_right: Five voucher variables available: number or nights, number of people, room type, add-ons and validity  
-:point_right:: Edit written vouchers at any time  
-:point_right: Create a TXT or PDF file with your vouchers  
-:point_right:: Ready to print! :computer:  
+:point_right: Choose from five password categories  
+:point_right: Each category added as a separate .csv file  
+:point_right: 20 password options in each category  
+:point_right: You can easily change passwords as you wish (remember to keep 20 in each file)  
+
 
 ## :star: How To Use
 :point_right: Clone the repository using [Git](https://git-scm.com/), then run it on your computer  
 :point_right: Pro-Tip: for best functionality use [the Oracle OpenJDK version 17](https://www.oracle.com/pl/java/technologies/downloads/#java17)  
-:point_right: Set up Maven  
-:point_right: Required dependency: [Apache PDFBox, version 3.0.1](https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox/3.0.1)  
-:point_right: Run the programme from the main method  
-
-
-
 
 # :star: Have fun! :star:
