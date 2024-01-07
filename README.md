@@ -2,14 +2,14 @@
 A structure-oriented app that codes a password and gives the player ten attempts to guess it.  
 
 
-![hangman1](https://github.com/AgnieszkaAureliaMarczak/Hangman/assets/139965402/26dfcc97-17cc-4b32-b908-f61445c0fb1a)
-
-
 ## :star: General Information
 
+Play against a computer opponent: select a category and try to guess the password before a hangman is drawn.  
+
+![hangman1](https://github.com/AgnieszkaAureliaMarczak/Hangman/assets/139965402/26dfcc97-17cc-4b32-b908-f61445c0fb1a)  
 
 *This is a copy of an interactive game created by me [here](https://github.com/AgnieszkaAureliaMarczak/Podstawy/blob/master/src/metody/Wisielec.java). 
-I designed it to practise principles of structure-oriented programming.*  
+I designed it to practise the principles of structure-oriented programming.*  
 
 ## :star: Features
 :point_right: Write unlimited number of coupons/vouchers   
