@@ -20,6 +20,7 @@ I designed it to practise the principles of structure-oriented programming.*
 
 ## :star: How To Use
 :point_right: Clone the repository using [Git](https://git-scm.com/), then run it on your computer  
-:point_right: Pro-Tip: for best functionality use [the Oracle OpenJDK version 17](https://www.oracle.com/pl/java/technologies/downloads/#java17)  
+:point_right: Pro-Tip 1: for best functionality use [the Oracle OpenJDK version 17](https://www.oracle.com/pl/java/technologies/downloads/#java17)  
+:point_right: Pro-Tip 2: make sure you can read a .csv file from your IDE (check before running the app if you need any extra plugins)  
 
 # :star: Have fun! :star:
