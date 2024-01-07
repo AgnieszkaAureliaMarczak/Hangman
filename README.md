@@ -1,4 +1,4 @@
-# :star: Hangman - guessing game :star:
+# :star: Hangman - guessing game :star: 
 A structure-oriented app that codes a password and gives the player ten attempts to guess it.  
 
 
@@ -7,9 +7,9 @@ A structure-oriented app that codes a password and gives the player ten attempts
 
 ## :star: General Information
 
-Create multiple accomodation vouchers with various variables and save them into a TXT or PDF file, ready to print!  
 
-*I created this app to practise object-oriented principles such as inheritance and interfaces.*
+*This is a copy of an interactive game created by me [here](https://github.com/AgnieszkaAureliaMarczak/Podstawy/blob/master/src/metody/Wisielec.java). 
+I designed it to practise principles of structure-oriented programming.*  
 
 ## :star: Features
 :point_right: Write unlimited number of coupons/vouchers   
