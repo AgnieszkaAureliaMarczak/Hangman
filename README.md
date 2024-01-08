@@ -13,14 +13,19 @@ I designed it to practise the principles of structure-oriented programming.*
 
 ## :star: Features
 :point_right: Choose from five password categories  
+
 :point_right: Each category added as a separate .csv file  
+
 :point_right: 20 password options in each category  
+
 :point_right: You can easily change passwords as you wish (remember to keep 20 in each file)  
 
 
 ## :star: How To Use
 :point_right: Clone the repository using [Git](https://git-scm.com/), then run it on your computer  
+
 :point_right: Pro-Tip 1: for best functionality use [the Oracle OpenJDK version 17](https://www.oracle.com/pl/java/technologies/downloads/#java17)  
+
 :point_right: Pro-Tip 2: make sure you can read a .csv file from your IDE (check before running the app if you need any extra plugins)  
 
 # :star: Have fun! :star:
