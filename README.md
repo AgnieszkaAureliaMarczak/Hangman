@@ -28,6 +28,7 @@ I designed it to practise the principles of structure-oriented programming.*
 
 ![hangman](https://github.com/AgnieszkaAureliaMarczak/Hangman/assets/139965402/2edcd77d-7e4a-4759-af4d-b841ab4fc866)  
 
+:point_right: When typing, use small letters only  
 
 :point_right: Pro-Tip 1: for best functionality use [the Oracle OpenJDK version 17](https://www.oracle.com/pl/java/technologies/downloads/#java17)  
 
